@@ -3,8 +3,8 @@
 
 #include <stdlib.h>
 
-#define EXIT_SIZE -1;
-#define EXIT_MALLOC -2;
+#define EXIT_SIZE -1
+#define EXIT_MALLOC -2
 
 typedef struct Matrix {
   size_t rows;
@@ -14,19 +14,18 @@ typedef struct Matrix {
   struct Matrix *parent;
 } Matrix;
 
-double rand_double(double low, double high);
+double rand_double(double lo, double hi);
 
-int mat_alloc(Matrix **mat, size_t row, size_t col);
+int mat_alloc(Matrix **mat, size_t ro, size_t co);
 
 void mat_free(Matrix *mat);
 
-int mat_alloc_ref(Matrix **dst, Matrix *src, size_t offset, size_t row,
-                  size_t col);
+int mat_alloc_ref(Matrix **dst, Matrix *src, size_t off, size_t ro, size_t co);
 
-void mat_set(Matrix *src, size_t row, size_t col, double val);
+void mat_set(Matrix *src, size_t ro, size_t co, double val);
 
-double mat_get(const Matrix *src, size_t row, size_t col);
+double mat_get(const Matrix *src, size_t ro, size_t co);
 
-void mat_rand(Matrix *mat, unsigned int seed, double low, double high);
+void mat_rand(Matrix *mat, unsigned int seed, double lo, double hi);
 
 #endif // MATRIX_H
