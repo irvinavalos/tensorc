@@ -1,31 +1,45 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 
-#define EXIT_SIZE -1
-#define EXIT_MALLOC -2
-
-typedef struct Matrix {
-  size_t rows;
-  size_t cols;
+typedef struct matrix {
+  size_t n_row;
+  size_t n_col;
+  size_t n_ele;
   double *data;
-  int ref_count;
-  struct Matrix *parent;
-} Matrix;
+  size_t ref_count;
+  struct matrix *parent;
+  ptrdiff_t stride_row;
+  ptrdiff_t stride_col;
+} matrix;
 
-double rand_double(double lo, double hi);
+int allocate_matrix(matrix **mat, size_t row, size_t col);
 
-int mat_alloc(Matrix **mat, size_t ro, size_t co);
+int allocate_ref_matrix(matrix **dst, matrix *src, size_t row, size_t col,
+                        size_t offset);
 
-void mat_free(Matrix *mat);
+void deallocate_matrix(matrix *mat);
 
-int mat_alloc_ref(Matrix **dst, Matrix *src, size_t off, size_t ro, size_t co);
+void free_matrix(matrix **mat);
 
-void mat_set(Matrix *src, size_t ro, size_t co, double val);
+static inline double *ele_ptr(const matrix *mat, size_t row, size_t col) {
+  return mat->data + (ptrdiff_t)row * mat->stride_row +
+         (ptrdiff_t)col * mat->stride_col;
+}
 
-double mat_get(const Matrix *src, size_t ro, size_t co);
+static inline const double *ele_cptr(const matrix *mat, size_t row, size_t col) {
+  return mat->data + (ptrdiff_t)row * mat->stride_row +
+         (ptrdiff_t)col * mat->stride_col;
+}
 
-void mat_rand(Matrix *mat, unsigned int seed, double lo, double hi);
+int mat_set(matrix *mat, size_t row, size_t col, double val);
+
+double mat_get(const matrix *mat, size_t row, size_t col);
+
+void print_matrix(const matrix *mat);
 
 #endif // MATRIX_H
